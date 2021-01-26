@@ -58,6 +58,21 @@ def test_model(state_dict_path: str):
 
     Plotter.plot(plot_data, 28, n_rows, n_cols, plot_actual_labels, plot_predicted_labels)
 
+def get_model_accuracy(state_dict_path: str):
+    nn.load_model(state_dict_path)
+    total_labels = test_labels.shape[0]
+    total_correct = 0
+    for i in range(0, total_labels):
+        actual_label = test_labels.cpu().numpy()[i].argmax()
+        predicted_label = nn.model(test_data[i]).detach().cpu().numpy().argmax()
+        if actual_label == predicted_label:
+            total_correct += 1
+    print(f"Total: {total_labels}, Correct: {total_correct}, Wrong: {total_labels - total_correct}")
+    print(f"Percentage: {total_correct / total_labels}")
+
+
 if __name__ == "__main__":
     #main()
-    test_model("state_dicts/model-50000-copy.torch")
+    state_dict_path = "state_dicts/model-50000-copy.torch"
+    get_model_accuracy(state_dict_path)
+    #test_model(state_dict_path)
