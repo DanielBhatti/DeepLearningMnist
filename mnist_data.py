@@ -71,6 +71,9 @@ class Plotter:
             if predicted_label_list is not None:
                 title += " P: " + str(predicted_label_list[i])
             ax.set_title(title, fontsize=10)
+            ax.tick_params(axis=u'both', which=u'both', length=0)
+            plt.setp(ax.get_xticklabels(), visible = False)
+            plt.setp(ax.get_yticklabels(), visible = False)
 
             plt.imshow(img)
         plt.show()
