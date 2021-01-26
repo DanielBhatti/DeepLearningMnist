@@ -40,5 +40,9 @@ class NeuralNetwork:
 
         torch.save(self.model.state_dict(), self.model_save_path)
 
+    def load_model(self, state_dict_path: str):
+        state_dict = torch.load(state_dict_path)
+        self.model.load_state_dict(state_dict)
+
 if __name__ == "__main__":
     print('a')
