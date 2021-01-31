@@ -57,7 +57,7 @@ def test_model(state_dict_path: str, n_rows: int = 5, n_cols: int = 5):
         random_index = np.random.randint(0, n_test)
         plot_data.append(test_data[random_index, :].cpu())
         plot_actual_labels.append(test_labels.cpu().numpy()[random_index].argmax())
-        plot_predicted_labels.append(nn.model(test_data[random_index]).detach().cpu().numpy().argmax())
+        plot_predicted_labels.append(nn.model.eval()(test_data[random_index]).detach().cpu().numpy().argmax())
 
     Plotter.plot(plot_data, 28, n_rows, n_cols, plot_actual_labels, plot_predicted_labels)
 
@@ -74,10 +74,33 @@ def print_model_accuracy(state_dict_path: str):
     print(f"Total: {total_labels}, Correct: {total_correct}, Wrong: {total_labels - total_correct}")
     print(f"Percentage: {total_correct / total_labels}")
 
+def plot_wrong_predictions(state_dict_path: str, n: int):
+    nn.load_model(state_dict_path)
+
+    plot_data = []
+    plot_actual_labels = []
+    plot_predicted_labels = []
+
+    num_plotted = 0
+    num_to_plot = min(n, test_data.shape[0])
+    rows = int(np.sqrt(num_to_plot))
+    cols = int(np.sqrt(num_to_plot)) + 1
+    for i in range(0, test_data.shape[0] - 1):
+        label = test_labels.cpu().numpy()[i].argmax()
+        prediction = nn.model.eval()(test_data[i]).detach().cpu().numpy().argmax()
+
+        if label != prediction and num_plotted < num_to_plot:
+            plot_data.append(test_data[i, :].cpu())
+            plot_actual_labels.append(label)
+            plot_predicted_labels.append(prediction)
+            num_plotted += 1
+
+    Plotter.plot(plot_data, 28, rows, cols, plot_actual_labels, plot_predicted_labels)
 
 if __name__ == "__main__":
     #main()
     #state_dict_path = "state_dicts/model-50000-copy.torch"
     state_dict_path = "state_dicts/model-500-complex-network.torch"
-    print_model_accuracy(state_dict_path)
-    test_model(state_dict_path)
+    #print_model_accuracy(state_dict_path)
+    #test_model(state_dict_path)
+    plot_wrong_predictions(state_dict_path, 72)
