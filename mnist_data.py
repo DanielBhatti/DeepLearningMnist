@@ -79,18 +79,6 @@ class Plotter:
         plt.show()
 
 if __name__ == "__main__":
-    """
-    train_path = "data/train.csv"
-    test_path = "data/test.csv"
-    train_input, train_output = Reader.csv_to_tensor(train_path, input_type = torch.float, output_type = torch.float)
-    test_input, test_output = Reader.csv_to_tensor(test_path, input_type = torch.float, output_type = torch.float)
-
-    print(train_input.shape)
-    print(train_output.shape)
-    print(test_input.shape)
-    print(test_output.shape)
-    """
-
     n_train = 60000
     n_test = 10000
 
